@@ -132,27 +132,14 @@ Loading the required libraries.
 \subsection{Overall analysis, by dose and
 supplement}\label{overall-analysis-by-dose-and-supplement}
 
-\begin{Shaded}
-\begin{Highlighting}[]
-\CommentTok{# Load the data and convert to DPLYR data.frame}
-\KeywordTok{attach}\NormalTok{(ToothGrowth)}
-\NormalTok{data <-}\StringTok{ }\KeywordTok{tbl_df}\NormalTok{(ToothGrowth)}
-
-\CommentTok{# Plot the length changes by the dose and type of supplement}
-\KeywordTok{ggplot}\NormalTok{(data, }\KeywordTok{aes}\NormalTok{(dose, len)) +}
-\StringTok{  }\KeywordTok{geom_point}\NormalTok{(}\KeywordTok{aes}\NormalTok{(}\DataTypeTok{color =} \NormalTok{supp), }\DataTypeTok{size=}\DecValTok{4}\NormalTok{, }\DataTypeTok{alpha=}\DecValTok{1}\NormalTok{/}\DecValTok{2}\NormalTok{) +}
-\StringTok{  }\KeywordTok{xlab}\NormalTok{(}\StringTok{"Dose"}\NormalTok{) +}
-\StringTok{  }\KeywordTok{ylab}\NormalTok{(}\StringTok{"Tooth Length"}\NormalTok{) +}
-\StringTok{  }\KeywordTok{labs}\NormalTok{(}\DataTypeTok{title=}\StringTok{"ToothGrowth Exploratory Analysis (divide by Supplement Type)"}\NormalTok{) +}
-\StringTok{  }\KeywordTok{theme_bw}\NormalTok{()}
-\end{Highlighting}
-\end{Shaded}
-
 \includegraphics{statinference-courseproject-1-Question-2_files/figure-latex/unnamed-chunk-2-1.pdf}
+
+\emph{Note: See appendix for generating code required for this figure.}
 
 From the plot above, it seems the `supp' (Supplement Type) doesn't
 impact the tooth growth although as the dosage increases, there seems to
-be a clear increase in tooth growth.
+be a clear increase in tooth growth. Let's perform an exploratory
+analysis of the data by doses only.
 
 \subsection{Analysis, by dose only}\label{analysis-by-dose-only}
 
@@ -162,18 +149,12 @@ be a clear increase in tooth growth.
 \NormalTok{data_bydose <-}\StringTok{ }\NormalTok{data %>%}
 \StringTok{  }\KeywordTok{group_by}\NormalTok{(dose) %>%}
 \StringTok{  }\KeywordTok{summarise}\NormalTok{(}\DataTypeTok{AVG =} \KeywordTok{mean}\NormalTok{(len))}
-
-\CommentTok{# Plot the length changes by the dose only}
-\KeywordTok{ggplot}\NormalTok{(data_bydose, }\KeywordTok{aes}\NormalTok{(dose, AVG)) +}
-\StringTok{  }\KeywordTok{geom_line}\NormalTok{(}\DataTypeTok{color=}\StringTok{"steelblue"}\NormalTok{, }\DataTypeTok{size=}\DecValTok{2}\NormalTok{, }\DataTypeTok{alpha=}\DecValTok{1}\NormalTok{/}\DecValTok{2}\NormalTok{) +}
-\StringTok{  }\KeywordTok{xlab}\NormalTok{(}\StringTok{"Dose"}\NormalTok{) +}
-\StringTok{  }\KeywordTok{ylab}\NormalTok{(}\StringTok{"Tooth Length"}\NormalTok{) +}
-\StringTok{  }\KeywordTok{labs}\NormalTok{(}\DataTypeTok{title=}\StringTok{"ToothGrowth Exploratory Analysis"}\NormalTok{) +}
-\StringTok{  }\KeywordTok{theme_bw}\NormalTok{()}
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{statinference-courseproject-1-Question-2_files/figure-latex/unnamed-chunk-3-1.pdf}
+\includegraphics{statinference-courseproject-1-Question-2_files/figure-latex/unnamed-chunk-4-1.pdf}
+
+\emph{Note: See appendix for generating code required for this figure.}
 
 From the latest plot, it seems clearer that as the dose increases, the
 tooth length changes increase.
@@ -211,6 +192,8 @@ Tests}\label{confidence-intervals-and-hypothesis-tests}
 \item
   The observations are unrelated and independent (hence, using the
   ``Independent T Confidence Intervals'')
+\item
+  Assuming a different variance per group.
 \end{enumerate}
 
 \subsection{Condidence Intervals}\label{condidence-intervals}
@@ -264,10 +247,45 @@ Tests}\label{confidence-intervals-and-hypothesis-tests}
 \itemsep1pt\parskip0pt\parsep0pt
 \item
   Strong relation as the dose increases, the changes to the tooth growth
-  increase.
+  increase. Since the entire interval has positively shifted, hence
+  rejecting the null hypothesis and confirming the impacts from the dose
+  size to the tooth growth.
 \item
-  No relation can be made between the changes in tooth growth and the
-  supplement type.
+  Since 0 is contained within the interval, no conclusions can be made
+  related to the supplement type, hence no relation can be made between
+  the changes in tooth growth and the supplement type.
 \end{enumerate}
+
+\pagebreak
+
+\section{Appendix}\label{appendix}
+
+\subsection{Figure 1}\label{figure-1}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Plot the length changes by the dose and type of supplement}
+\KeywordTok{ggplot}\NormalTok{(data, }\KeywordTok{aes}\NormalTok{(dose, len)) +}
+\StringTok{  }\KeywordTok{geom_point}\NormalTok{(}\KeywordTok{aes}\NormalTok{(}\DataTypeTok{color =} \NormalTok{supp), }\DataTypeTok{size=}\DecValTok{4}\NormalTok{, }\DataTypeTok{alpha=}\DecValTok{1}\NormalTok{/}\DecValTok{2}\NormalTok{) +}
+\StringTok{  }\KeywordTok{xlab}\NormalTok{(}\StringTok{"Dose"}\NormalTok{) +}
+\StringTok{  }\KeywordTok{ylab}\NormalTok{(}\StringTok{"Tooth Length"}\NormalTok{) +}
+\StringTok{  }\KeywordTok{labs}\NormalTok{(}\DataTypeTok{title=}\StringTok{"Exploratory Analysis (divide by 'supp)"}\NormalTok{) +}
+\StringTok{  }\KeywordTok{theme_bw}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\subsection{Figure 2}\label{figure-2}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Plot the length changes by the dose only}
+\KeywordTok{ggplot}\NormalTok{(data_bydose, }\KeywordTok{aes}\NormalTok{(dose, AVG)) +}
+\StringTok{  }\KeywordTok{geom_line}\NormalTok{(}\DataTypeTok{color=}\StringTok{"steelblue"}\NormalTok{, }\DataTypeTok{size=}\DecValTok{2}\NormalTok{, }\DataTypeTok{alpha=}\DecValTok{1}\NormalTok{/}\DecValTok{2}\NormalTok{) +}
+\StringTok{  }\KeywordTok{xlab}\NormalTok{(}\StringTok{"Dose"}\NormalTok{) +}
+\StringTok{  }\KeywordTok{ylab}\NormalTok{(}\StringTok{"Tooth Length"}\NormalTok{) +}
+\StringTok{  }\KeywordTok{labs}\NormalTok{(}\DataTypeTok{title=}\StringTok{"Exploratory Analysis"}\NormalTok{) +}
+\StringTok{  }\KeywordTok{theme_bw}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
 
 \end{document}

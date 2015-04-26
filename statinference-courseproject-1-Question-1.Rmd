@@ -13,45 +13,35 @@ graphics: yes
 ---
 
 # Overview
-This report provides a comparison between the values obtained directly via the sample (and by the Central Limit Theorem) and to those of the entire population.
-
-# Required tools
-Loading the required libraries.
-
-```{r echo=FALSE}
-
-# Loading libraries
-# none
-
-```
+Investigation of the exponential distribution in R and comparison with the Central Limit Theorem.  This report will test using a simulation the distribution obtained from it, confirming the CLT by validating the distribution as a standard normal distribution.
 
 # Simulation
 Preparing the simulation using:
+
 1. num: number of exponentials per simulations
 2. lambda: the rate parameter used within this investigation
 3. numsim: number of simulations used in this investigation
 
 By:
+
 1. running a 'numsim' times the 'rexp' (the "random exponantial distribution") with a 'lambda' rate for n=num.
 2. saves the results into matrix for further manipulation
 
 ```{r echo=TRUE}
-
-# Number of averages
-num <- 40
-# By default, our lambda value will be permanently set to 0.2
-lambda <- 0.2
-
-# Number of simulations
-numsim <- 1000
+num <- 40 # Number of averages
+lambda <- 0.2 # By default, our lambda value will be permanently set to 0.2
+numsim <- 1000 # Number of simulations
 
 # Simulating the random generation of an exponential distribution
-simulateddata <- matrix(data=replicate(numsim, rexp(n=num, rate=lambda)), nrow=numsim, ncol=num, byrow=TRUE )
+simulateddata <- matrix(data=replicate(numsim, rexp(n=num, rate=lambda)),
+                        nrow=numsim,
+                        ncol=num,
+                        byrow=TRUE )
 
 ```
 
 # Sample Mean versus Theoretical Mean
-Comparing the sample mean (i.e. the mean for each rows) versus the theoritical mean (i.e. the mean for the entire simulation).
+Comparing the sample mean versus the theoritical mean.
 
 ```{r, echo=TRUE}
 # Calculating the overall means
@@ -63,22 +53,19 @@ mean(mns)
 
 ```
 
-As observed, the sample mean calculated is fairly closed to the averages of 40 means exponantials simulated, hence proving the CLT.
+As observed, the sample mean calculated is fairly closed to the averages of 40 means exponantials simulated.
 
 ```{r echo=TRUE}
-
 # Displaying the histogram of all simulated means of 40 random exponantials
-hist(mns, xlab="Means", ylab="Frequency", main="Sample Mean versus Theoritical Mean")
-#abline(v=mean(mns), col="blue", lwd=3)
+hist(mns, xlab="Means", ylab="Frequency", main="Sample Mean vs. Theoritical Mean")
 abline(v=1/lambda, col="red", lwd=3)
 
 ```
 
 The distribution is centered at or around both the sample mean or theoritical mean.
 
-
 # Sample Variance versus Theoretical Variance
-Comparing the sample variance (i.e. the variance for each rows) versus the theoritical variance (i.e. the variance for the entire simulation).
+Comparing the sample variance versus the theoritical variance.
 
 ```{r, echo=TRUE}
 # Calculating the variances and averaging them:
@@ -93,11 +80,10 @@ mean(vrs)
 
 ```
 
-As observed, the averages of all variances of the simulated 40 random exponantials is fairly closed to the calculated variance, hence proving the CLT.
+As observed, the averages of all variances of the simulated 40 random exponantials is fairly closed to the calculated variance.
 
 ```{r echo=TRUE}
-
-hist(vrs, xlab="Variances", ylab="Frequency", main="Sample Variance versus Theoritical Variance")
+hist(vrs, xlab="Variances", ylab="Frequency", main="Sample Variance vs. Theoritical Variance")
 abline(v=(1/lambda)^2, col="red", lwd=2)
 
 ```
@@ -115,4 +101,3 @@ hist(mns, xlab="Means", ylab="Frequency", main="Histogram of the sample means")
 ```
 
 Since the histogram follows/is closed to a normal distribution, we can assume the distribution is approxamitively normal.
-

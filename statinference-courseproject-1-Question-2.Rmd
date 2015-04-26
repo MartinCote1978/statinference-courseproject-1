@@ -24,14 +24,12 @@ library(dplyr)
 library(tidyr)
 library(ggplot2)
 
-
 ```
 
 # Exploratory Data Analysis
 
 ## Overall analysis, by dose and supplement
-
-```{r echo=TRUE}
+```{r echo=FALSE}
 # Load the data and convert to DPLYR data.frame
 attach(ToothGrowth)
 data <- tbl_df(ToothGrowth)
@@ -41,12 +39,14 @@ ggplot(data, aes(dose, len)) +
   geom_point(aes(color = supp), size=4, alpha=1/2) +
   xlab("Dose") +
   ylab("Tooth Length") +
-  labs(title="ToothGrowth Exploratory Analysis (divide by Supplement Type)") +
+  labs(title="Exploratory Analysis (divide by 'supp')") +
   theme_bw()
 
 ```
 
-From the plot above, it seems the 'supp' (Supplement Type) doesn't impact the tooth growth although as the dosage increases, there seems to be a clear increase in tooth growth.
+*Note: See appendix for generating code required for this figure.*
+
+From the plot above, it seems the 'supp' (Supplement Type) doesn't impact the tooth growth although as the dosage increases, there seems to be a clear increase in tooth growth.  Let's perform an exploratory analysis of the data by doses only.
 
 ## Analysis, by dose only
 
@@ -56,15 +56,20 @@ data_bydose <- data %>%
   group_by(dose) %>%
   summarise(AVG = mean(len))
 
+```
+
+```{r echo=FALSE}
 # Plot the length changes by the dose only
 ggplot(data_bydose, aes(dose, AVG)) +
   geom_line(color="steelblue", size=2, alpha=1/2) +
   xlab("Dose") +
   ylab("Tooth Length") +
-  labs(title="ToothGrowth Exploratory Analysis") +
+  labs(title="Exploratory Analysis") +
   theme_bw()
 
 ```
+
+*Note: See appendix for generating code required for this figure.*
 
 From the latest plot, it seems clearer that as the dose increases, the tooth length changes increase.
 
@@ -80,6 +85,7 @@ summary(data)
 ## Assumptions
 1. 'len' is a continuous random variable, hence using a T distribution (as a better alternative to a normal distribution) 
 2. The observations are unrelated and independent (hence, using the "Independent T Confidence Intervals")
+3. Assuming a different variance per group.
 
 ## Condidence Intervals
 ```{r echo=TRUE}
@@ -91,5 +97,34 @@ t.test(data$len ~ data$supp)
 ```
 
 ## Conclusions
-1. Strong relation as the dose increases, the changes to the tooth growth increase.
-2. No relation can be made between the changes in tooth growth and the supplement type.
+1. Strong relation as the dose increases, the changes to the tooth growth increase.  Since the entire interval has positively shifted, hence rejecting the null hypothesis and confirming the impacts from the dose size to the tooth growth.
+2. Since 0 is contained within the interval, no conclusions can be made related to the supplement type, hence no relation can be made between the changes in tooth growth and the supplement type.
+
+\pagebreak
+
+# Appendix
+
+## Figure 1
+```{r echo=TRUE, eval=FALSE}
+# Plot the length changes by the dose and type of supplement
+ggplot(data, aes(dose, len)) +
+  geom_point(aes(color = supp), size=4, alpha=1/2) +
+  xlab("Dose") +
+  ylab("Tooth Length") +
+  labs(title="Exploratory Analysis (divide by 'supp)") +
+  theme_bw()
+
+```
+
+## Figure 2
+```{r echo=TRUE, eval=FALSE}
+# Plot the length changes by the dose only
+ggplot(data_bydose, aes(dose, AVG)) +
+  geom_line(color="steelblue", size=2, alpha=1/2) +
+  xlab("Dose") +
+  ylab("Tooth Length") +
+  labs(title="Exploratory Analysis") +
+  theme_bw()
+
+```
+
