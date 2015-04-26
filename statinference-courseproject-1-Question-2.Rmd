@@ -1,0 +1,95 @@
+---
+title: 'Exponential Distribution Investigation in R - Statistical Inference: Course Project - Question 2'
+author: "Martin Cote"
+date: "April 26, 2015"
+output:
+  pdf_document:
+    fig_height: 3
+    fig_width: 4.5
+    keep_tex: yes
+header-includes: \usepackage{graphicx}
+graphics: yes
+---
+
+# Overview
+Analysis of the ToothGrowth data from the R datasets package, as part of the Statistical Inference course from Coursera.
+
+# Required tools
+Loading the required libraries.
+
+```{r echo=FALSE}
+
+# Loading libraries
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+
+
+```
+
+# Exploratory Data Analysis
+
+## Overall analysis, by dose and supplement
+
+```{r echo=TRUE}
+# Load the data and convert to DPLYR data.frame
+attach(ToothGrowth)
+data <- tbl_df(ToothGrowth)
+
+# Plot the length changes by the dose and type of supplement
+ggplot(data, aes(dose, len)) +
+  geom_point(aes(color = supp), size=4, alpha=1/2) +
+  xlab("Dose") +
+  ylab("Tooth Length") +
+  labs(title="ToothGrowth Exploratory Analysis (divide by Supplement Type)") +
+  theme_bw()
+
+```
+
+From the plot above, it seems the 'supp' (Supplement Type) doesn't impact the tooth growth although as the dosage increases, there seems to be a clear increase in tooth growth.
+
+## Analysis, by dose only
+
+```{r echo=TRUE}
+# Summarise the data by dose and average changes of teeth
+data_bydose <- data %>%
+  group_by(dose) %>%
+  summarise(AVG = mean(len))
+
+# Plot the length changes by the dose only
+ggplot(data_bydose, aes(dose, AVG)) +
+  geom_line(color="steelblue", size=2, alpha=1/2) +
+  xlab("Dose") +
+  ylab("Tooth Length") +
+  labs(title="ToothGrowth Exploratory Analysis") +
+  theme_bw()
+
+```
+
+From the latest plot, it seems clearer that as the dose increases, the tooth length changes increase.
+
+## Summary of the data
+```{r echo=TRUE}
+# Basic summary of the data
+summary(data)
+
+```
+
+# Confidence Intervals and Hypothesis Tests
+
+## Assumptions
+1. 'len' is a continuous random variable, hence using a T distribution (as a better alternative to a normal distribution) 
+2. The observations are unrelated and independent (hence, using the "Independent T Confidence Intervals")
+
+## Condidence Intervals
+```{r echo=TRUE}
+# Testing dose
+t.test(data$len, data$dose, paired=FALSE, var.equal=FALSE)
+
+# Testing supp
+t.test(data$len ~ data$supp)
+```
+
+## Conclusions
+1. Strong relation as the dose increases, the changes to the tooth growth increase.
+2. No relation can be made between the changes in tooth growth and the supplement type.
